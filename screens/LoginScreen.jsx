@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, Image, TouchableOpacity } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import { useNavigation } from "@react-navigation/native";
 import LogInput from "../components/LogInput";
 import { KeyboardAvoidingView, Platform } from "react-native";
+import { auth } from "../firebase.config";
 //#region Image url
 const IMG_URL =
   "https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NjV8fHdoaXRlJTIwYmxhY2t8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60";
@@ -14,7 +15,14 @@ export default function LoginScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  console.log(username, password);
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        navigation.replace("HomeScreen");
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   return (
     <KeyboardAvoidingView

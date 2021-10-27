@@ -4,6 +4,7 @@ import LogInput from "../components/LogInput";
 import tw from "tailwind-react-native-classnames";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAvoidingView, Platform } from "react-native";
+import { auth } from "../firebase.config";
 //#region Image url
 const IMG_URL =
   "https://images.unsplash.com/photo-1534296000128-e754fd87f8dc?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nzd8fHdoaXRlJTIwYmxhY2t8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60";
@@ -15,6 +16,18 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState("");
 
   useLayoutEffect(() => {}, []);
+
+  const register = () => {
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((authUser) => {
+        authUser.user.update({
+          displayName: username,
+          photoURL= img || "https://www.e-xpertsolutions.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png"
+        });
+      })
+      .catch((err) => alert(err.message));
+  };
 
   const navigation = useNavigation();
   return (
@@ -51,7 +64,10 @@ export default function RegisterScreen() {
         <LogInput placeholder="votre pseudo" />
         <LogInput placeholder="mot de passe" isPassword={true} />
         <View style={tw``}>
-          <TouchableOpacity style={tw`mb-6 mt-3 p-3 w-5/6 bg-white rounded-md`}>
+          <TouchableOpacity
+            onPress={() => register()}
+            style={tw`mb-6 mt-3 p-3 w-5/6 bg-white rounded-md`}
+          >
             <Text style={tw.style(`text-black text-center`)}>
               Créer un compte
             </Text>
