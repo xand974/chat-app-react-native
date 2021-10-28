@@ -4,32 +4,36 @@ import LogInput from "../components/LogInput";
 import tw from "tailwind-react-native-classnames";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAvoidingView, Platform } from "react-native";
-import { auth } from "../firebase.config";
+import { auth } from "../firebase";
+import { createUserWithEmailAndPassword } from "@firebase/auth";
 //#region Image url
 const IMG_URL =
   "https://images.unsplash.com/photo-1534296000128-e754fd87f8dc?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nzd8fHdoaXRlJTIwYmxhY2t8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60";
+const DEFAULT_PIC =
+  "https://www.e-xpertsolutions.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png";
 //#endregion
 
 export default function RegisterScreen() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [photoURL, setPhotoURL] = useState("");
+  const navigation = useNavigation();
 
   useLayoutEffect(() => {}, []);
 
-  const register = () => {
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then((authUser) => {
-        authUser.user.update({
-          displayName: username,
-          photoURL= img || "https://www.e-xpertsolutions.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png"
-        });
-      })
-      .catch((err) => alert(err.message));
+  const register = async () => {
+    try {
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      const currentUser = res.user;
+      currentUser.photoURL = photoURL || DEFAULT_PIC;
+      currentUser.displayName = username;
+      navigation.replace("LoginScreen");
+    } catch (err) {
+      alert(err);
+    }
   };
 
-  const navigation = useNavigation();
   return (
     <KeyboardAvoidingView
       behavior="padding"
@@ -60,9 +64,19 @@ export default function RegisterScreen() {
         <Text style={tw`text-center text-gray-300 text-sm mb-3 italic`}>
           S'enregistrer
         </Text>
-        <LogInput placeholder="john@gmail.com" />
-        <LogInput placeholder="votre pseudo" />
-        <LogInput placeholder="mot de passe" isPassword={true} />
+        <LogInput
+          placeholder="john@gmail.com"
+          onChangeText={(text) => setEmail(text)}
+        />
+        <LogInput
+          placeholder="votre pseudo"
+          onChangeText={(text) => setUsername(text)}
+        />
+        <LogInput
+          placeholder="mot de passe"
+          isPassword={true}
+          onChangeText={(text) => setPassword(text)}
+        />
         <View style={tw``}>
           <TouchableOpacity
             onPress={() => register()}

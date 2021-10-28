@@ -1,16 +1,15 @@
 // Import the functions you need from the SDKs you need
-import * as firebase from "firebase";
-import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from "firebase/app";
 import { REACT_APP_FIREBASE_KEY } from "@env";
-import "firebase/firestore";
-import "firebase/auth";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_KEY,
+  apiKey: REACT_APP_FIREBASE_KEY,
   authDomain: "chat-app-native-fea23.firebaseapp.com",
   projectId: "chat-app-native-fea23",
   storageBucket: "chat-app-native-fea23.appspot.com",
@@ -20,15 +19,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-let app;
-if (firebase.apps.length === 0) {
-  app = firebase.initializeApp(firebaseConfig);
-} else {
-  app = firebase.app();
-}
+const app = initializeApp(firebaseConfig);
 
-const db = app.firestore();
-const auth = firebase.auth();
-const analytics = getAnalytics(app);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
 export { db, auth };

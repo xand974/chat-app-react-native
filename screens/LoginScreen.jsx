@@ -4,7 +4,8 @@ import tw from "tailwind-react-native-classnames";
 import { useNavigation } from "@react-navigation/native";
 import LogInput from "../components/LogInput";
 import { KeyboardAvoidingView, Platform } from "react-native";
-import { auth } from "../firebase.config";
+import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 //#region Image url
 const IMG_URL =
   "https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NjV8fHdoaXRlJTIwYmxhY2t8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60";
@@ -12,17 +13,25 @@ const IMG_URL =
 
 export default function LoginScreen() {
   const navigation = useNavigation();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((authUser) => {
-      if (authUser) {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
         navigation.replace("HomeScreen");
       }
     });
     return unsubscribe;
   }, []);
+
+  const login = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -55,7 +64,7 @@ export default function LoginScreen() {
           Entrez dans la matrice
         </Text>
         <LogInput
-          onChangeText={(text) => setUsername(text)}
+          onChangeText={(text) => setEmail(text)}
           placeholder="votre pseudo"
         />
         <LogInput
@@ -64,7 +73,10 @@ export default function LoginScreen() {
           isPassword={true}
         />
         <View style={tw``}>
-          <TouchableOpacity style={tw`mb-6 mt-3 p-3 w-5/6 bg-white rounded-md`}>
+          <TouchableOpacity
+            style={tw`mb-6 mt-3 p-3 w-5/6 bg-white rounded-md`}
+            onPress={() => login()}
+          >
             <Text style={tw.style(`text-black text-center`)}>Se Connecter</Text>
           </TouchableOpacity>
           <TouchableOpacity
