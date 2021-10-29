@@ -11,6 +11,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { auth } from "./firebase";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import ChatScreen from "./screens/ChatScreen";
 
 const headerOption = {
   headerStyle: { backgroundColor: "#070819" },
@@ -41,6 +42,7 @@ export default function App() {
               name="AddConversationScreen"
               component={AddConversationScreen}
             />
+            <Stack.Screen name="ChatScreen" component={ChatScreen} />
           </Stack.Navigator>
         </SafeAreaProvider>
       </NavigationContainer>
