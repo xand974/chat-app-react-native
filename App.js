@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -12,6 +12,7 @@ import { auth } from "./firebase";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import ChatScreen from "./screens/ChatScreen";
+import Loading from "./components/Loading";
 
 const headerOption = {
   headerStyle: { backgroundColor: "#070819" },
@@ -19,6 +20,45 @@ const headerOption = {
 };
 
 export default function App() {
+  const [loading, setLoading] = useState(false);
+  const [logIn, setLogIn] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setLoading(true);
+        setLogIn(true);
+      } else {
+        setLoading(true);
+        setLogIn(false);
+      }
+    });
+    return unsubscribe;
+  }, []);
+
+  if (!loading) {
+    return <Loading />;
+  }
+
+  if (!logIn) {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="RegisterScreen">
+          <Stack.Screen
+            name="LoginScreen"
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="RegisterScreen"
+            component={RegisterScreen}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
+
   return (
     <Provider store={store}>
       <NavigationContainer>
@@ -27,17 +67,7 @@ export default function App() {
             screenOptions={headerOption}
             initialRouteName="HomeScreen"
           >
-            <Stack.Screen
-              name="LoginScreen"
-              component={LoginScreen}
-              options={{ headerShown: false }}
-            />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
-            <Stack.Screen
-              name="RegisterScreen"
-              component={RegisterScreen}
-              options={{ headerShown: false }}
-            />
             <Stack.Screen
               name="AddConversationScreen"
               component={AddConversationScreen}

@@ -43,7 +43,7 @@ export default function HomeScreen() {
         <View>
           <TouchableOpacity onPress={() => logout()}>
             <Image
-              style={tw.style(`h-8 w-8 rounded-full`, {
+              style={tw.style(`h-8 w-8 rounded-full ml-3`, {
                 resizeMode: "contain",
               })}
               source={{

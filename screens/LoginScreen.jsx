@@ -16,15 +16,6 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        navigation.replace("HomeScreen");
-      }
-    });
-    return unsubscribe;
-  }, []);
-
   const login = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
