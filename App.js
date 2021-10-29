@@ -8,39 +8,43 @@ import RegisterScreen from "./screens/RegisterScreen";
 import AddConversationScreen from "./screens/AddConversationScreen";
 const Stack = createNativeStackNavigator();
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { auth } from "./firebase";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 const headerOption = {
-  headerStyle: { backgroundColor: "#eaeaea" },
-  headerTintColor: "black",
+  headerStyle: { backgroundColor: "#070819" },
+  headerTintColor: "white",
 };
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <SafeAreaProvider>
-        <Stack.Navigator initialRouteName="RegisterScreen">
-          <Stack.Screen
-            name="LoginScreen"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="HomeScreen"
-            component={HomeScreen}
-            options={headerOption}
-          />
-          <Stack.Screen
-            name="RegisterScreen"
-            component={RegisterScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="AddConversationScreen"
-            component={AddConversationScreen}
-          />
-        </Stack.Navigator>
-      </SafeAreaProvider>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <Stack.Navigator
+            screenOptions={headerOption}
+            initialRouteName="HomeScreen"
+          >
+            <Stack.Screen
+              name="LoginScreen"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="HomeScreen" component={HomeScreen} />
+            <Stack.Screen
+              name="RegisterScreen"
+              component={RegisterScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AddConversationScreen"
+              component={AddConversationScreen}
+            />
+          </Stack.Navigator>
+        </SafeAreaProvider>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

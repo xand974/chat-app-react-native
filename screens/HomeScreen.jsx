@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
@@ -11,11 +11,17 @@ import {
 import tw from "tailwind-react-native-classnames";
 import ConversationList from "../components/ConversationList";
 import { useNavigation } from "@react-navigation/native";
-import { auth } from "../firebase";
-import Icon from "react-native-vector-icons/AntDesign";
+import AntIcon from "react-native-vector-icons/AntDesign";
+import EvilIcon from "react-native-vector-icons/EvilIcons";
 import { signOut } from "@firebase/auth";
+import { auth } from "../firebase";
+import { fetchChats } from "../redux/firebaseCalls";
+import { useDispatch, useSelector } from "react-redux";
+
 export default function HomeScreen() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const { chats } = useSelector((state) => state.chat);
 
   const logout = async () => {
     try {
@@ -26,12 +32,16 @@ export default function HomeScreen() {
     }
   };
 
+  useEffect(() => {
+    fetchChats(dispatch);
+  }, []);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Conversations",
       headerLeft: () => (
         <View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => logout()}>
             <Image
               style={tw.style(`h-8 w-8 rounded-full`, {
                 resizeMode: "contain",
@@ -44,9 +54,16 @@ export default function HomeScreen() {
         </View>
       ),
       headerRight: () => (
-        <View>
-          <TouchableOpacity onPress={() => logout()}>
-            <Icon name="logout" color="black" size={20} />
+        <View style={tw.style(`flex-row items-center justify-between  w-20`)}>
+          <TouchableOpacity style={tw.style(`mr-1`)} onPress={() => {}}>
+            <AntIcon name="camerao" color="white" size={26} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("AddConversationScreen");
+            }}
+          >
+            <EvilIcon name="pencil" color="white" size={40} />
           </TouchableOpacity>
         </View>
       ),
@@ -56,7 +73,9 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={tw`h-full`}>
       <ScrollView>
-        <ConversationList />
+        {chats.map((chat) => (
+          <ConversationList key={chat.id} chat={chat} />
+        ))}
       </ScrollView>
     </SafeAreaView>
   );

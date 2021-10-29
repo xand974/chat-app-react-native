@@ -28,9 +28,8 @@ export default function RegisterScreen() {
       const currentUser = res.user;
       currentUser.photoURL = photoURL || DEFAULT_PIC;
       currentUser.displayName = username;
-      navigation.replace("LoginScreen");
     } catch (err) {
-      alert(err);
+      alert(err.message);
     }
   };
 
@@ -76,6 +75,7 @@ export default function RegisterScreen() {
           placeholder="mot de passe"
           isPassword={true}
           onChangeText={(text) => setPassword(text)}
+          onSubmitEditing={register}
         />
         <View style={tw``}>
           <TouchableOpacity

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import { ListItem, Avatar } from "react-native-elements";
 
-export default function ConversationList() {
+export default function ConversationList({ chat }) {
   return (
     <ListItem>
       <Avatar
@@ -13,7 +13,7 @@ export default function ConversationList() {
         }}
       />
       <ListItem.Content>
-        <ListItem.Title>Santa Is Coming Baby</ListItem.Title>
+        <ListItem.Title>{chat.chatName}</ListItem.Title>
         <ListItem.Subtitle
           numberOfLines={1}
           ellipsizeMode="tail"

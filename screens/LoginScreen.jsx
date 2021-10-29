@@ -29,7 +29,7 @@ export default function LoginScreen() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (err) {
-      console.log(err);
+      alert(err.message);
     }
   };
 
@@ -65,7 +65,7 @@ export default function LoginScreen() {
         </Text>
         <LogInput
           onChangeText={(text) => setEmail(text)}
-          placeholder="votre pseudo"
+          placeholder="votre email"
         />
         <LogInput
           onChangeText={(text) => setPassword(text)}
