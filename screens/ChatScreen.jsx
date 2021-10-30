@@ -104,14 +104,12 @@ export default function ChatScreen() {
               contentContainerStyle={{
                 paddingTop: 20,
               }}
-              style={tw`flex-1 h-full flex-column`}
+              style={tw`flex-1 h-full flex-col-reverse`}
             >
               {messages.map(({ id, data }) =>
                 data.email === auth.currentUser.email ? (
                   <View key={id} style={tw`w-full flex-row-reverse mt-4 mb-4`}>
-                    <View
-                      style={tw` h-auto w-4/6 flex-row-reverse items-center`}
-                    >
+                    <View style={tw` w-4/6 flex-row-reverse items-center`}>
                       <Avatar
                         rounded
                         source={{
@@ -128,7 +126,7 @@ export default function ChatScreen() {
                   </View>
                 ) : (
                   <View key={id} style={tw`w-full flex-row mt-4 mb-4`}>
-                    <View style={tw` h-auto w-4/6 flex-row items-center`}>
+                    <View style={tw`w-4/6 flex-row items-center`}>
                       <Avatar
                         rounded
                         source={{
