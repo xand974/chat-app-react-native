@@ -10,11 +10,13 @@ import { db } from "../firebase";
 export default function AddConversationScreen() {
   const navigation = useNavigation();
   const [userInput, setUserInput] = useState();
+  const [img, setImg] = useState(null);
 
   const createChat = async () => {
     try {
       await addDoc(collection(db, "chats"), {
         chatName: userInput,
+        img,
       }).then(() => {
         navigation.goBack();
       });
@@ -37,6 +39,16 @@ export default function AddConversationScreen() {
         leftIcon={() => (
           <View style={tw.style(`mr-2`)}>
             <Icon name="chat" color="black" size={20} />
+          </View>
+        )}
+      />
+      <Input
+        onSubmitEditing={createChat}
+        placeholder="entrez un lien pour la conversation"
+        onChangeText={(text) => setImg(text)}
+        leftIcon={() => (
+          <View style={tw.style(`mr-2 `)}>
+            <Icon name="image" color="black" size={20} />
           </View>
         )}
       />

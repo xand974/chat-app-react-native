@@ -25,9 +25,8 @@ export default function RegisterScreen() {
   const register = async () => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
-      const currentUser = res.user;
-      currentUser.photoURL = photoURL || DEFAULT_PIC;
-      currentUser.displayName = username;
+      res.user.photoURL = photoURL || DEFAULT_PIC;
+      res.user.displayName = username;
     } catch (err) {
       alert(err.message);
     }

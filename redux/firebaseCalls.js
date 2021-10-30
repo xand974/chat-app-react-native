@@ -8,7 +8,6 @@ export const fetchChats = async (dispatch) => {
   dispatch(getChatsStart());
   try {
     const res = await getDocs(DB_REF);
-    console.log(res.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     dispatch(
       getChatsSuccess(res.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
     );
