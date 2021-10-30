@@ -1,5 +1,5 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import { getApp, getApps, initializeApp } from "firebase/app";
 import { REACT_APP_FIREBASE_KEY } from "@env";
 import { getAuth } from "firebase/auth";
 import { getFirestore, Firestore } from "firebase/firestore";
@@ -17,6 +17,8 @@ const firebaseConfig = {
   appId: "1:294194810377:web:2b050c8d837f85b1b632d8",
   measurementId: "G-8CF7X6N6Q4",
 };
+
+getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

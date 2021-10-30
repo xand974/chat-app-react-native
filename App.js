@@ -39,39 +39,37 @@ export default function App() {
     return <Loading />;
   }
 
-  if (!logIn) {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="RegisterScreen">
-          <Stack.Screen
-            name="LoginScreen"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="RegisterScreen"
-            component={RegisterScreen}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  }
-
   return (
     <Provider store={store}>
       <NavigationContainer>
         <SafeAreaProvider>
-          <Stack.Navigator
-            screenOptions={headerOption}
-            initialRouteName="HomeScreen"
-          >
-            <Stack.Screen name="HomeScreen" component={HomeScreen} />
-            <Stack.Screen
-              name="AddConversationScreen"
-              component={AddConversationScreen}
-            />
-            <Stack.Screen name="ChatScreen" component={ChatScreen} />
+          <Stack.Navigator>
+            {logIn ? (
+              <Stack.Group
+                screenOptions={headerOption}
+                initialRouteName="HomeScreen"
+              >
+                <Stack.Screen name="HomeScreen" component={HomeScreen} />
+                <Stack.Screen
+                  name="AddConversationScreen"
+                  component={AddConversationScreen}
+                />
+                <Stack.Screen name="ChatScreen" component={ChatScreen} />
+              </Stack.Group>
+            ) : (
+              <Stack.Group initialRouteName="RegisterScreen">
+                <Stack.Screen
+                  name="LoginScreen"
+                  component={LoginScreen}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="RegisterScreen"
+                  component={RegisterScreen}
+                  options={{ headerShown: false }}
+                />
+              </Stack.Group>
+            )}
           </Stack.Navigator>
         </SafeAreaProvider>
       </NavigationContainer>

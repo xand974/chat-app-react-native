@@ -10,8 +10,9 @@ export default function Loading() {
   useEffect(() => {
     Animated.timing(turnAnim, {
       toValue: 360,
-      duration: 13000,
+      duration: 22000,
       easing: Easing.ease,
+      useNativeDriver: false,
     }).start();
   }, [turnAnim]);
 
